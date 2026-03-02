@@ -1,0 +1,4 @@
+mean(Proyecto_Cap1$MAT, na.rm = TRUE)
+sd(Proyecto_Cap1$MAT, na.rm = TRUE)
+aggregate(MAT ~ ACCEPTED, data = Proyecto_Cap1, mean)
+aggregate(MAT ~ ACCEPTED, data = Proyecto_Cap1, sd)
