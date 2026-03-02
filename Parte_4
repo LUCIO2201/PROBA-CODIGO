@@ -1,0 +1,47 @@
+##########################################################################
+# PROYECTO EQUIPO #8 - PROBABILIDAD Y ESTADÍSTICA
+# VARIABLE INDEPENDIENTE (X): MAT
+# VARIABLE DEPENDIENTE (Y): SCORE
+# DESCRIPCIÓN: Análisis de correlación y diagrama de dispersión
+##########################################################################
+
+# --- PASO 4.a: Carga de datos y Diagrama de Dispersión ---
+
+# Instrucción de carga: Seleccionar el archivo .txt generado previamente.
+# El archivo debe tener encabezados "MAT" y "SCORE" separados por coma.
+tryCatch({
+  datos_equipo8 <- read.table(file.choose(), header = TRUE, sep = ",")
+  
+  # Generación del Diagrama de Dispersión
+  # Se utiliza la función plot para visualizar la relación bivariada.
+  plot(datos_equipo8$MAT, datos_equipo8$SCORE,
+       main = "Diagrama de Dispersión: MAT vs SCORE (Equipo 8)",
+       xlab = "Desempeño en Matemáticas (MAT) - Variable X",
+       ylab = "Puntaje Global (SCORE) - Variable Y",
+       pch = 19,               # Símbolo de punto sólido
+       col = "#003366",        # Azul institucional
+       cex = 1.2)              # Tamaño del punto
+  
+  # Ajuste de línea de tendencia (Regresión Lineal Simple)
+  # lm() calcula el modelo lineal; abline() lo dibuja sobre la gráfica.
+  modelo_lineal <- lm(SCORE ~ MAT, data = datos_equipo8)
+  abline(modelo_lineal, col = "red", lwd = 2, lty = 1)
+  
+  # Inserción de cuadrícula para facilitar la lectura de coordenadas
+  grid(nx = NULL, ny = NULL, col = "lightgray", lty = "dotted")
+
+}, error = function(e) {
+  message("Error: Asegúrese de seleccionar el archivo correcto con formato .txt o .csv")
+})
+
+# --- PASO 4.b: Cálculo del Coeficiente de Correlación ---
+
+# Se utiliza el método de Pearson para cuantificar la intensidad de la relación.
+r_resultado <- cor(datos_equipo8$MAT, datos_equipo8$SCORE)
+
+# Salida formal de resultados a consola
+cat("----------------------------------------------------------\n")
+cat("RESULTADOS DEL ANÁLISIS DE CORRELACIÓN (EQUIPO 8)\n")
+cat("----------------------------------------------------------\n")
+cat("Coeficiente de correlación de Pearson (r):", round(r_resultado, 4), "\n")
+cat("----------------------------------------------------------\n")
