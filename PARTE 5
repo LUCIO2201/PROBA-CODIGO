@@ -1,0 +1,43 @@
+# ---- Instalar y cargar librerías ----
+# install.packages(c("ggplot2", "dplyr"))
+library(ggplot2)
+library(dplyr)
+
+modelo <- lm(score ~ mat)
+cat("\n=== PUNTO 5: Resumen del Modelo de Regresión ===\n")
+print(summary(modelo))
+
+intercepto <- coef(modelo)[1]   # Intercepto
+pendiente <- coef(modelo)[2]   # Pendiente
+R2    <- summary(modelo)$r.squared
+
+cat("\nEcuación: SCORE =", round(beta0,4), "+", round(beta1,4), "* MAT\n")
+cat("R² =", round(R2,4), "-> MAT explica el", round(R2*100,1), "% de la variabilidad de SCORE.\n")
+
+ggplot(datos, aes(x = MAT, y = SCORE)) +
+  geom_point(aes(color = ACCEPTED), alpha = 0.65, size = 2.5) +
+  geom_smooth(method = "lm", se = TRUE, color = "#2c3e50", linewidth = 1.5) +
+  scale_color_manual(values = c("SI" = "#2ecc71", "NO" = "#e74c3c")) +
+  annotate("text",
+           x     = min(mat) + 0.1,
+           y     = max(score) - 15,
+           label = paste0("SCORE = ", round(beta0,2), " + ", round(beta1,2), " x MAT\n",
+                          "r = ", round(r_pearson,4), "   |   R2 = ", round(R2,4)),
+           hjust = 0, fontface = "bold", size = 4.5, color = "#2c3e50") +
+  labs(title = "Punto 5: Regresión Lineal — SCORE ~ MAT",
+       x = "MAT", y = "SCORE", color = "ACCEPTED") +
+  theme_minimal(base_size = 13) +
+  theme(plot.title       = element_text(face = "bold", hjust = 0.5),
+        panel.background = element_rect(fill = "#ecf0f1"))
+
+# b) Predecir SCORE para X_barra = -0.375
+x_pred <- -0.375
+y_pred <- predict(modelo, newdata = data.frame(mat = x_pred))
+cat("\n=== PUNTO 5b: Predicción para X_barra = -0.375 ===\n")
+cat("SCORE predicho =", round(y_pred, 4), "\n")
+
+# c) Encontrar MAT cuando SCORE = 679
+y_target <- 679
+x_for_y  <- (y_target - beta0) / beta1
+cat("\n=== PUNTO 5c: MAT necesario para SCORE = 679 ===\n")
+cat("MAT =", round(x_for_y, 4), "\n")
